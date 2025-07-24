@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meet Vadariya - Portfolio</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Custom Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #000010; /* Darker space blue background */
+            color: #e0e0e0;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .content-section {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh; /* Use min-height to allow content to expand */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 6rem 1rem; /* Adjusted padding for mobile */
+            max-width: 1200px; /* Wider max-width for layout */
+            margin: 0 auto;
+        }
+        
+        /* Glassmorphism effect for Navbar */
+        .glass-nav {
+            background: rgba(0, 0, 16, 0.5);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(100, 100, 220, 0.2);
+            transition: background-color 0.5s ease, border-color 0.5s ease;
+        }
+
+        .action-btn {
+            background: linear-gradient(90deg, #4f46e5, #db2777);
+            transition: all 0.3s ease;
+        }
+        .action-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(219, 39, 119, 0.5);
+        }
+        
+        /* Card styles */
+        .glass-card {
+            background: rgba(10, 10, 30, 0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(100, 100, 220, 0.2);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            transform: translateY(-8px);
+            background: rgba(20, 20, 40, 0.7);
+            border-color: rgba(120, 100, 240, 0.4);
+        }
+
+        /* Light Theme Styles */
+        body.light {
+            background-color: #f0f2f5;
+            color: #1a202c;
+        }
+        body.light .text-white { color: #1a202c; }
+        body.light .text-gray-300 { color: #4a5568; }
+        body.light .text-cyan-300 { color: #007a7a; }
+        body.light .glass-nav {
+            background: rgba(255, 255, 255, 0.7);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        body.light .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        body.light .glass-card:hover {
+            background: rgba(255, 255, 255, 0.9);
+        }
+        body.light a { color: #2b6cb0; }
+        body.light .action-btn a { color: white; }
+
+        /* Pre-loader Styles */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+        }
+        #preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        #logo-mv {
+            width: 180px;
+            height: 180px;
+            animation: scale-up 1s ease-in-out 2.5s forwards;
+        }
+        .m-path, .v-path {
+            stroke-width: 5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+        }
+        .m-path {
+            stroke-dasharray: 155;
+            stroke-dashoffset: 155;
+            animation: draw-m 1.5s ease-in-out forwards;
+        }
+        .v-path {
+            stroke-dasharray: 125;
+            stroke-dashoffset: 125;
+            animation: draw-v 1.2s ease-in-out forwards 0.8s;
+        }
+        @keyframes draw-m { to { stroke-dashoffset: 0; } }
+        @keyframes draw-v { to { stroke-dashoffset: 0; } }
+        @keyframes scale-up {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 15px #fff); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="overscroll-none">
+
+    <!-- Pre-loader -->
+    <div id="preloader">
+        <svg id="logo-mv" viewBox="0 0 120 100">
+            <!-- M Path -->
+            <g>
+                <path class="m-path" d="M 10 80 V 30 L 25 55 L 40 30 V 80" stroke="#4f46e5" style="animation-delay: 0.2s;"></path>
+                <path class="m-path" d="M 10 80 V 30 L 25 55 L 40 30 V 80" stroke="#db2777" style="animation-delay: 0.1s;"></path>
+                <path class="m-path" d="M 10 80 V 30 L 25 55 L 40 30 V 80" stroke="#7DF9FF"></path>
+            </g>
+             <!-- V Path -->
+            <g>
+                <path class="v-path" d="M 60 30 L 75 80 L 90 30" stroke="#4f46e5" style="animation-delay: 0.2s;"></path>
+                <path class="v-path" d="M 60 30 L 75 80 L 90 30" stroke="#db2777" style="animation-delay: 0.1s;"></path>
+                <path class="v-path" d="M 60 30 L 75 80 L 90 30" stroke="#7DF9FF"></path>
+            </g>
+        </svg>
+    </div>
+
+    <!-- Navbar -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full z-10 glass-nav">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <a href="#home" class="text-2xl font-bold text-white">MV</a>
+                <!-- Desktop Menu & Theme Toggle -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <ul class="flex items-center space-x-8">
+                        <li><a href="#home" class="text-gray-300 hover:text-white transition-colors">Home</a></li>
+                        <li><a href="#about" class="text-gray-300 hover:text-white transition-colors">About</a></li>
+                        <li><a href="#skill" class="text-gray-300 hover:text-white transition-colors">Skill</a></li>
+                        <li><a href="#project" class="text-gray-300 hover:text-white transition-colors">Project</a></li>
+                        <li><a href="#certification" class="text-gray-300 hover:text-white transition-colors">Certification</a></li>
+                        <li><a href="#contact" class="text-gray-300 hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                    <button id="theme-toggle-desktop" class="p-2 rounded-full focus:outline-none"><svg id="theme-icon-sun-desktop" class="h-6 w-6 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg><svg id="theme-icon-moon-desktop" class="h-6 w-6 text-gray-300 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg></button>
+                </div>
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-300 hover:text-white focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden glass-nav">
+            <ul class="px-2 pt-2 pb-3 space-y-1 sm:px-3 text-center">
+                <li><a href="#home" class="block text-gray-300 hover:text-white py-2">Home</a></li>
+                <li><a href="#about" class="block text-gray-300 hover:text-white py-2">About</a></li>
+                <li><a href="#skill" class="block text-gray-300 hover:text-white py-2">Skill</a></li>
+                <li><a href="#project" class="block text-gray-300 hover:text-white py-2">Project</a></li>
+                <li><a href="#certification" class="block text-gray-300 hover:text-white py-2">Certification</a></li>
+                <li><a href="#contact" class="block text-gray-300 hover:text-white py-2">Contact</a></li>
+                <li><div class="flex justify-center py-2"><button id="theme-toggle-mobile" class="p-2 rounded-full focus:outline-none"><svg id="theme-icon-sun-mobile" class="h-6 w-6 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg><svg id="theme-icon-moon-mobile" class="h-6 w-6 text-gray-300 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg></button></div></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 3D Background Canvas -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Main container for all sections -->
+    <main id="content-container" class="opacity-0">
+
+        <!-- Home Section -->
+        <section id="home" class="content-section text-center">
+            <h1 class="text-4xl sm:text-5xl md:text-8xl font-bold text-white mb-4">Meet Vadariya</h1>
+            <p class="text-lg sm:text-xl md:text-3xl text-cyan-300">Java Full Stack Developer</p>
+             <div class="mt-8 text-lg">
+                <p>Scroll down to explore</p>
+                <svg class="w-8 h-8 mx-auto mt-4 animate-bounce text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="content-section">
+            <div class="grid md:grid-cols-2 gap-8 md:gap-16 items-center">
+                <div class="flex justify-center items-center">
+                    <img src="https://placehold.co/400x400/000010/7DF9FF?text=Meet+V." alt="Meet Vadariya" class="w-[250px] h-[250px] sm:w-[300px] sm:h-[300px] md:w-[400px] md:h-[400px] rounded-full border-4 border-cyan-400/50 shadow-lg shadow-cyan-500/20">
+                </div>
+                <div class="text-center md:text-left">
+                    <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">About Me</h2>
+                    <p id="about-text" class="text-lg text-gray-300 mb-8">Hi, I'm Meet Vadariya. I'm a Java Full Stack Developer. I build full-stack web applications. I love clean design, efficient code, and real-world solutions.</p>
+                    <div class="flex items-center justify-center md:justify-start">
+                         <a href="https://www.linkedin.com/in/meet-vadariya/" class="inline-block px-8 py-3 text-lg font-semibold text-white rounded-full action-btn">Hire Me</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skill Section -->
+        <section id="skill" class="content-section">
+            <div class="w-full">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-12 text-center">My Skills</h2>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-8">
+                    <div class="glass-card rounded-lg p-4 sm:p-6 flex flex-col items-center justify-center gap-4"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" alt="Java Icon" class="w-12 h-12 sm:w-16 sm:h-16"/><h3 class="text-lg sm:text-xl font-semibold text-white">JAVA</h3></div>
+                    <div class="glass-card rounded-lg p-4 sm:p-6 flex flex-col items-center justify-center gap-4"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/c/c-original.svg" alt="C Icon" class="w-12 h-12 sm:w-16 sm:h-16"/><h3 class="text-lg sm:text-xl font-semibold text-white">C</h3></div>
+                    <div class="glass-card rounded-lg p-4 sm:p-6 flex flex-col items-center justify-center gap-4"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5 Icon" class="w-12 h-12 sm:w-16 sm:h-16"/><h3 class="text-lg sm:text-xl font-semibold text-white">HTML</h3></div>
+                    <div class="glass-card rounded-lg p-4 sm:p-6 flex flex-col items-center justify-center gap-4"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3 Icon" class="w-12 h-12 sm:w-16 sm:h-16"/><h3 class="text-lg sm:text-xl font-semibold text-white">CSS</h3></div>
+                    <div class="glass-card rounded-lg p-4 sm:p-6 flex flex-col items-center justify-center gap-4"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript Icon" class="w-12 h-12 sm:w-16 sm:h-16"/><h3 class="text-lg sm:text-xl font-semibold text-white">JavaScript</h3></div>
+                    <div class="glass-card rounded-lg p-4 sm:p-6 flex flex-col items-center justify-center gap-4"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React Icon" class="w-12 h-12 sm:w-16 sm:h-16"/><h3 class="text-lg sm:text-xl font-semibold text-white">React</h3></div>
+                    <div class="glass-card rounded-lg p-4 sm:p-6 flex flex-col items-center justify-center gap-4"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git Icon" class="w-12 h-12 sm:w-16 sm:h-16"/><h3 class="text-lg sm:text-xl font-semibold text-white">Git</h3></div>
+                    <div class="glass-card rounded-lg p-4 sm:p-6 flex flex-col items-center justify-center gap-4"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub Icon" class="w-12 h-12 sm:w-16 sm:h-16"/><h3 class="text-lg sm:text-xl font-semibold text-white">GitHub</h3></div>
+                    <div class="glass-card rounded-lg p-4 sm:p-6 flex flex-col items-center justify-center gap-4"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original-wordmark.svg" alt="MySQL Icon" class="w-12 h-12 sm:w-16 sm:h-16"/><h3 class="text-lg sm:text-xl font-semibold text-white">MySQL</h3></div>
+                    <div class="glass-card rounded-lg p-4 sm:p-6 flex flex-col items-center justify-center gap-4"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postman/postman-original.svg" alt="Postman Icon" class="w-12 h-12 sm:w-16 sm:h-16"/> <h3 class="text-lg sm:text-xl font-semibold text-white">Postman</h3></div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Project Section -->
+        <section id="project" class="content-section">
+            <div class="w-full">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-12 text-center">My Projects</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Project Card 1 -->
+                    <div class="glass-card rounded-lg overflow-hidden flex flex-col"><img src="img/Car sell wabsite.jpg" alt="Project One Image" class="w-full h-48 object-cover"><div class="p-6 flex flex-col flex-grow"><h3 class="text-2xl font-bold text-white mb-3">Car selling platform</h3><p class="text-gray-300 mb-4 flex-grow">A full-featured call selling platform built with java, including product listings, a shopping cart, EMI plans and user authentication and admin deshboard.</p><div class="flex flex-wrap gap-2 mb-4"><span class="bg-indigo-500/30 text-indigo-200 text-xs font-semibold px-2.5 py-0.5 rounded-full">Java</span><span class="bg-green-500/30 text-green-200 text-xs font-semibold px-2.5 py-0.5 rounded-full">Servlet</span><span class="bg-yellow-500/30 text-yellow-200 text-xs font-semibold px-2.5 py-0.5 rounded-full">MySQL</span></div><a href="#" target="_blank" class="text-cyan-300 hover:text-cyan-100 font-semibold mt-auto">View Project &rarr;</a></div></div>
+                    <!-- Project Card 2 -->
+                    <div class="glass-card rounded-lg overflow-hidden flex flex-col"><img src="img/complaint Management system.jpg" alt="Project Two Image" class="w-full h-48 object-cover"><div class="p-6 flex flex-col flex-grow"><h3 class="text-2xl font-bold text-white mb-3">Complaint Management System</h3><p class="text-gray-300 mb-4 flex-grow">Designed UI pages for user login, complaint registration, admin dashboard, and status tracking.</p><div class="flex flex-wrap gap-2 mb-4"><span class="bg-cyan-500/30 text-cyan-200 text-xs font-semibold px-2.5 py-0.5 rounded-full">HTML</span><span class="bg-pink-500/30 text-pink-200 text-xs font-semibold px-2.5 py-0.5 rounded-full">CSS</span><span class="bg-blue-500/30 text-blue-200 text-xs font-semibold px-2.5 py-0.5 rounded-full">JavaScript</span></div><a href="https://meetvadariya.github.io/Complaint-Hub/" target="_blank" class="text-cyan-300 hover:text-cyan-100 font-semibold mt-auto">View Code &rarr;</a></div></div>
+                    <!-- Hidden Project Card 3 -->
+                    <div class="glass-card rounded-lg overflow-hidden flex-col extra-project hidden"><img src="img/portfolio.avif" alt="Project Three Image" class="w-full h-48 object-cover"><div class="p-6 flex flex-col flex-grow"><h3 class="text-2xl font-bold text-white mb-3">Portfolio Website</h3><p class="text-gray-300 mb-4 flex-grow">This very portfolio, showcasing 3D animations with Three.js and high-level scroll interactions using GSAP.</p><div class="flex flex-wrap gap-2 mb-4"><span class="bg-green-500/30 text-green-200 text-xs font-semibold px-2.5 py-0.5 rounded-full">Three.js</span><span class="bg-blue-500/30 text-blue-200 text-xs font-semibold px-2.5 py-0.5 rounded-full">GSAP</span><span class="bg-yellow-500/30 text-yellow-200 text-xs font-semibold px-2.5 py-0.5 rounded-full">TailwindCSS</span></div><a href="#"  target="_blank" class="text-cyan-300 hover:text-cyan-100 font-semibold mt-auto">View Project &rarr;</a></div></div>
+                    <!-- Hidden Project Card 4 -->
+                    <div class="glass-card rounded-lg overflow-hidden flex-col extra-project hidden"><img src="img/car service.jpg" alt="Project Four Image" class="w-full h-48 object-cover"><div class="p-6 flex flex-col flex-grow"><h3 class="text-2xl font-bold text-white mb-3">Car Service and Repair Website UI</h3><p class="text-gray-300 mb-4 flex-grow">Designed a responsive web UI for a car service and repair center, offering services like tire replacement, vehicle checkups, and repairs.</p><div class="flex flex-wrap gap-2 mb-4"><span class="bg-yellow-500/30 text-yellow-200 text-xs font-semibold px-2.5 py-0.5 rounded-full">HTML</span><span class="bg-purple-500/30 text-purple-200 text-xs font-semibold px-2.5 py-0.5 rounded-full">CSS</span><span class="bg-red-500/30 text-red-200 text-xs font-semibold px-2.5 py-0.5 rounded-full">JavaScript</span></div><a href="https://meetvadariya.github.io/cars/" target="_blank" class="text-cyan-300 hover:text-cyan-100 font-semibold mt-auto">View Project &rarr;</a></div></div>
+                </div>
+                <div id="show-more-container" class="text-center mt-8">
+                    <button id="show-more-btn" class="action-btn px-6 py-3 text-base font-semibold text-white rounded-full">Show More Projects</button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Certification Section -->
+        <section id="certification" class="content-section">
+            <div class="w-full">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-12 text-center">Certifications & Experience</h2>
+                <div class="max-w-3xl mx-auto space-y-8">
+                    <div class="glass-card rounded-lg p-6"><h3 class="text-2xl font-bold text-white">Java Full Stack Developer</h3><p class="text-lg text-cyan-300 mb-3">BIT INFOTECH.</p><p class="text-gray-300">Gained hands-on experience in developing robust and scalable web applications using Java, Spring Boot, and React. Worked on the entire development lifecycle, from database design to UI implementation.</p></div>
+                    <div class="glass-card rounded-lg p-6"><h3 class="text-2xl font-bold text-white">MySQL Relational Database Design and Integration</h3><p class="text-lg text-cyan-300 mb-3">byteXL</p><p class="text-gray-300">esigned and implemented MySQL schemas for real-world web applications. System and Complaint Management System, enabling efficient data flow between frontend and backend components.</p></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Contact Section -->
+        <section id="contact" class="content-section">
+            <div class="w-full grid grid-cols-1 md:grid-cols-10 gap-8 md:gap-16 items-center">
+                <!-- Left Side: Contact Info -->
+                <div class="md:col-span-7">
+                    <div class="glass-card rounded-lg p-8 text-center md:text-left">
+                        <h2 class="text-4xl md:text-5xl font-bold text-white mb-8">Get in Touch</h2>
+                        <div class="flex items-center justify-center md:justify-start space-x-4">
+                            <a href="mailto:meetvadariya97263@gmail.com" class="w-16 h-16 rounded-full bg-gray-800/50 hover:bg-cyan-500/50 transition-colors flex items-center justify-center" aria-label="Email">
+                                <svg class="w-8 h-8 text-cyan-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            </a>
+                            <a href="https://www.linkedin.com/in/meet-vadariya/" class="w-16 h-16 rounded-full bg-gray-800/50 hover:bg-cyan-500/50 transition-colors flex items-center justify-center" aria-label="LinkedIn">
+                                <svg class="w-8 h-8 text-cyan-300" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                            </a>
+                            <a href="tel:+919328205826" class="w-16 h-16 rounded-full bg-gray-800/50 hover:bg-cyan-500/50 transition-colors flex items-center justify-center" aria-label="Phone">
+                                <svg class="w-8 h-8 text-cyan-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Right Side: Message and Button -->
+                <div class="md:col-span-3 text-center md:text-right">
+                    <p class="text-2xl md:text-3xl text-gray-300 mb-6">Thanks for scrolling!</p>
+                    <a href="CV MEET.pdf" target="_blank" class="inline-block px-6 py-3 text-base font-semibold text-white rounded-full action-btn">
+                        Download Resume
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <!-- Libraries: Three.js for 3D and GSAP for animations -->
+    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.module.js",
+            "gsap": "https://unpkg.com/gsap@3.12.2/index.js",
+            "gsap/ScrollTrigger": "https://unpkg.com/gsap@3.12.2/ScrollTrigger.js",
+            "gsap/ScrollToPlugin": "https://unpkg.com/gsap@3.12.2/ScrollToPlugin.js"
+        }
+    }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { gsap } from 'gsap';
+        import { ScrollTrigger } from 'gsap/ScrollTrigger';
+        import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+
+        gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+        // --- 1. Three.js Scene Setup ---
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x000010, 0.015);
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({
+            canvas: document.querySelector('#bg-canvas'),
+            alpha: true
+        });
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        // --- 2. 3D Objects: Digital Crystal and Nebula ---
+        const crystalGeometry = new THREE.IcosahedronGeometry(10, 1);
+        const crystalMaterial = new THREE.MeshStandardMaterial({
+            color: 0x7DF9FF,
+            metalness: 0.7,
+            roughness: 0.2,
+            emissive: 0x40E0D0,
+            emissiveIntensity: 0.3
+        });
+        const digitalCrystal = new THREE.Mesh(crystalGeometry, crystalMaterial);
+        digitalCrystal.position.set(0, 0, 0);
+        scene.add(digitalCrystal);
+
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 10000;
+        const posArray = new Float32Array(particlesCount * 3);
+        const colors = new Float32Array(particlesCount * 3);
+        const colorPalette = [new THREE.Color(0x4f46e5), new THREE.Color(0xdb2777), new THREE.Color(0x7DF9FF)];
+        for (let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 500;
+            const randomColor = colorPalette[Math.floor(Math.random() * colorPalette.length)];
+            colors[i] = randomColor.r;
+            colors[i+1] = randomColor.g;
+            colors[i+2] = randomColor.b;
+        }
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.5,
+            vertexColors: true,
+            blending: THREE.AdditiveBlending,
+            transparent: true,
+            opacity: 0.8
+        });
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+
+        // --- 3. Lighting ---
+        const pointLight1 = new THREE.PointLight(0xffffff, 1.5, 300);
+        pointLight1.position.set(15, 20, 10);
+        scene.add(pointLight1);
+        const pointLight2 = new THREE.PointLight(0x4f46e5, 3, 300);
+        pointLight2.position.set(-20, -15, 5);
+        scene.add(pointLight2);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
+        scene.add(ambientLight);
+        
+        camera.position.z = 40;
+
+        // --- 4. Animation Loop ---
+        const clock = new THREE.Clock();
+        function animate() {
+            const elapsedTime = clock.getElapsedTime();
+            digitalCrystal.rotation.y = .15 * elapsedTime;
+            digitalCrystal.rotation.x = .15 * elapsedTime;
+            particlesMesh.rotation.y = -0.02 * elapsedTime;
+            renderer.render(scene, camera);
+            window.requestAnimationFrame(animate);
+        }
+        animate();
+
+        // --- 5. Handle Window Resize ---
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // --- 6. GSAP Animations ---
+        const mainContent = document.getElementById('content-container');
+        gsap.from("#navbar", { duration: 1.5, y: -100, opacity: 0, ease: "power3.out", delay: 3.8 });
+        
+        const sections = document.querySelectorAll('.content-section');
+        sections.forEach(section => {
+            gsap.fromTo(section, 
+                { opacity: 0, visibility: 'hidden' },
+                {
+                    opacity: 1,
+                    y: 0,
+                    visibility: 'visible',
+                    duration: 1,
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: section,
+                        start: 'top 80%',
+                        end: 'bottom 20%',
+                        toggleActions: 'play none none reverse'
+                    }
+                }
+            );
+        });
+
+        const tl = gsap.timeline({
+            scrollTrigger: {
+                trigger: '#content-container',
+                start: 'top top',
+                end: 'bottom bottom',
+                scrub: 1.5,
+            }
+        });
+
+        // More dramatic animations
+        tl.to(camera.position, { x: 0, y: 0, z: 40 }, 'home')
+          .to(camera.rotation, { x: 0, y: 0, z: 0 }, 'home')
+          .to(digitalCrystal.scale, { x: 1, y: 1, z: 1 }, 'home')
+          .to(digitalCrystal.material.color, { r: 0.49, g: 0.976, b: 1 }, 'home')
+          
+          .to(camera.position, { x: 30, y: 0, z: 35 }, 'about')
+          .to(camera.rotation, { x: 0, y: Math.PI / 4, z: 0 }, 'about')
+          .to(digitalCrystal.scale, { x: 0.8, y: 0.8, z: 0.8 }, 'about-=0.5')
+          .to(digitalCrystal.scale, { x: 1, y: 1, z: 1 }, 'about')
+          .to(digitalCrystal.material.color, { r: 0.85, g: 0.15, b: 0.46 }, 'about')
+          
+          .to(camera.position, { x: 0, y: -30, z: 30 }, 'skill')
+          .to(camera.rotation, { x: Math.PI / 3, y: 0, z: -Math.PI / 10 }, 'skill')
+          .to(digitalCrystal.scale, { x: 0.8, y: 0.8, z: 0.8 }, 'skill-=0.5')
+          .to(digitalCrystal.scale, { x: 1, y: 1, z: 1 }, 'skill')
+          .to(digitalCrystal.material.color, { r: 1, g: 0.5, b: 0 }, 'skill')
+
+          .to(camera.position, { x: -30, y: 0, z: 35 }, 'project')
+          .to(camera.rotation, { x: 0, y: -Math.PI / 4, z: 0 }, 'project')
+          .to(digitalCrystal.scale, { x: 0.8, y: 0.8, z: 0.8 }, 'project-=0.5')
+          .to(digitalCrystal.scale, { x: 1, y: 1, z: 1 }, 'project')
+          .to(digitalCrystal.material.color, { r: 0.31, g: 0.27, b: 0.89 }, 'project')
+
+          .to(camera.position, { x: 0, y: 30, z: 30 }, 'certification')
+          .to(camera.rotation, { x: -Math.PI / 3, y: 0, z: Math.PI / 10 }, 'certification')
+          .to(digitalCrystal.scale, { x: 0.8, y: 0.8, z: 0.8 }, 'certification-=0.5')
+          .to(digitalCrystal.scale, { x: 1, y: 1, z: 1 }, 'certification')
+          .to(digitalCrystal.material.color, { r: 1, g: 1, b: 0 }, 'certification')
+
+          .to(camera.position, { x: 0, y: 0, z: 25 }, 'contact')
+          .to(camera.rotation, { x: 0, y: 0, z: 0 }, 'contact')
+          .to(digitalCrystal.scale, { x: 0.8, y: 0.8, z: 0.8 }, 'contact-=0.5')
+          .to(digitalCrystal.scale, { x: 1, y: 1, z: 1 }, 'contact')
+          .to(digitalCrystal.material.color, { r: 0.2, g: 1, b: 0.2 }, 'contact');
+
+        document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    gsap.to(window, {
+                        duration: 1.5,
+                        scrollTo: { y: targetElement, autoKill: false },
+                        ease: 'power2.inOut'
+                    });
+                }
+            });
+        });
+        
+        // --- 8. Theme Toggle ---
+        const themeToggleDesktop = document.getElementById('theme-toggle-desktop');
+        const sunIconDesktop = document.getElementById('theme-icon-sun-desktop');
+        const moonIconDesktop = document.getElementById('theme-icon-moon-desktop');
+        const themeToggleMobile = document.getElementById('theme-toggle-mobile');
+        const sunIconMobile = document.getElementById('theme-icon-sun-mobile');
+        const moonIconMobile = document.getElementById('theme-icon-moon-mobile');
+
+        function toggleTheme() {
+            document.body.classList.toggle('light');
+            const isLight = document.body.classList.contains('light');
+            
+            // Toggle desktop icons
+            sunIconDesktop.classList.toggle('hidden', !isLight);
+            moonIconDesktop.classList.toggle('hidden', isLight);
+            
+            // Toggle mobile icons
+            sunIconMobile.classList.toggle('hidden', !isLight);
+            moonIconMobile.classList.toggle('hidden', isLight);
+
+            // Animate 3D scene colors
+            gsap.to(scene.fog.color, { r: isLight ? 0.94 : 0, g: isLight ? 0.95 : 0, b: isLight ? 0.96 : 0.06, duration: 0.5 });
+            gsap.to(digitalCrystal.material.emissive, { r: isLight ? 0.1 : 0.25, g: isLight ? 0.4 : 0.88, b: isLight ? 0.8 : 0.81, duration: 0.5 });
+            gsap.to(pointLight2.color, { r: isLight ? 0.9 : 0.31, g: isLight ? 0.9 : 0.27, b: isLight ? 1 : 0.89, duration: 0.5 });
+        }
+
+        themeToggleDesktop.addEventListener('click', toggleTheme);
+        themeToggleMobile.addEventListener('click', toggleTheme);
+        
+        // --- 9. Mobile Menu Toggle ---
+        const mobileMenuBtn = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Close mobile menu when a link is clicked
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // --- 10. Pre-loader Logic ---
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            // Total animation time is 2.5s (draw) + 1s (scale-up) = 3.5s
+            // Delay after animation is 1.3s
+            // Total timeout = 3500 + 1300 = 4800ms
+            setTimeout(() => {
+                preloader.classList.add('hidden');
+                gsap.to(mainContent, { opacity: 1, duration: 0.5 });
+            }, 4800); 
+        });
+
+        // --- 11. Show More Projects ---
+        const showMoreBtn = document.getElementById('show-more-btn');
+        const extraProjects = document.querySelectorAll('.extra-project');
+
+        showMoreBtn.addEventListener('click', () => {
+            extraProjects.forEach(project => {
+                project.classList.remove('hidden');
+                gsap.from(project, {
+                    opacity: 0,
+                    y: 50,
+                    duration: 0.8,
+                    ease: 'power3.out'
+                });
+            });
+            gsap.to(showMoreBtn, {
+                opacity: 0,
+                duration: 0.5,
+                onComplete: () => {
+                    showMoreBtn.parentElement.style.display = 'none';
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
